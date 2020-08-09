@@ -1,0 +1,15 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-postgresql
+  namespace: postgresql
+  labels:
+    app: postgresql
+spec:
+  storageClassName: gp2
+  capacity:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
