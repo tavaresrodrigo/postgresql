@@ -28,7 +28,6 @@ A service type ClusterIP was created to expose the Postgres service into the sco
 
 Implementing the postgresql namespace, we allow the administrator to divide cluster resources, apply network policies, implement quotas, and implement fine adjustments on the resources and objects into the namespace.
 
-
 ## Common issues during the backup and restore 
 
 On Monday August 10, 2020 there were [3 closed issues]( https://github.com/pgbackrest/pgbackrest/issues?q=is%3Aissue+Kubernetes+is%3Aclosed+) on the pgbackrest project page related to Kubernetes, [105 closed issues](https://github.com/kubernetes/kubernetes/issues?q=is%3Aissue+Postgres+is%3Aclosed) and [17 open issues](https://github.com/kubernetes/kubernetes/issues?q=is%3Aissue+Postgres+is%3Aopen) related to Postgres on the Kubernetes project page, there are multiple root causes that are related to a number of factors as we can see below:
@@ -47,19 +46,26 @@ Readiness and Liveness probes, init containers, HPA, CA,
 
 ## Architecture
 
+Since the Kubernetes cluster is running on top of AWS Infrastructure with AWS EKS, a good approach to design the application architecture is to use the AWS [Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/?wa-lens-whitepapers.sort-by=item.additionalFields.sortDate&wa-lens-whitepapers.sort-order=desc), which describes the key concepts, design principles, and architectural best practices for designing and running workloads in the cloud.
+
+To support 10000 distinct database Pods simultaneously, the m5d.16xlarge instances can be a good option, with a limit of 737 ips per instance 14 instances spread across different AZs would be enough to afford the workload from the network perspective, in addition this is one of the instances types recommended by AWS as a good choice for many database workloads. A well designed and architected application must consider a series of functional requirements as SLA, Recoverability, Security, Capacity, Availability, Scalability and Maintainability.
 
 ## Tooling 
 
-*Prometheus
-*Helm
-*Grafana
-*Fluent Bit
-*Amazon Elasticsearch Service:
-*Kibana
+The native functionality provided by the container engine or runtime is usually not enough for a complete logging solution, logs should have a separate storage and lifecycle independent of nodes, pods, or containers (cluster-level-logging). Cluster-level logging requires a separate backend to store, analyze, and query logs,. since Kubernetes provides no native storage solution for that, a good approach is to adopt a set of third-party tools.
+
+Fluent Bit, Elasticsearch and Kibana are also known as “EFK stack”. Fluent Bit will forward logs from the individual instances in the cluster to a centralized logging backend where they are combined for higher-level reporting using ElasticSearch and Kibana.
+
+* Prometheus
+* Helm
+* Grafana
+* Fluent Bit
+* Amazon Elasticsearch Service:
+* Kibana
 
 ## Monitoring
 
-Prometheus is a time-series based, open source systems monitoring tool which joined the Cloud Native Computing Foundation in 2016 as the second hosted project, after Kubernetes. Prometheus collects metrics via a pull model over HTTP automatically discovering targets using Kubernetes API. There is a Prometheus exporter for PostgreSQL server metrics.
+Prometheus is a time-series based, open source systems monitoring tool which joined the Cloud Native Computing Foundation in 2016 as the second hosted project, after Kubernetes. Prometheus collects metrics via a pull model over HTTP automatically discovering targets using Kubernetes API. There is a [Prometheus exporter](https://github.com/wrouesnel/postgres_exporter) for PostgreSQL server metrics.
 
 ## On-call challenges 
 
