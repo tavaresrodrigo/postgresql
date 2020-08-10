@@ -76,5 +76,15 @@ Prometheus is a time-series based, open source systems monitoring tool which joi
 
 ## On-call challenges 
 
+One of the main challenges a pearson on call can face is in order to identify and prioritize the pages/tickets/events/incidents. Engineers on call must have a clear guideline and be aware of the expected actions regarding each severity case, based on the SLA the engineer will be able to determine which incident deserve more attention in case there are multiple events simultaneously. 
 
+In order to diagnose, mitigate, fix, or escalate production incidents the best approach is to automate operational tasks as much as possible. Manual interventions in production must of the time will represent more chances to create a negative impact to the operation.
+
+The on-call can be tricky when engineer gets paged about a hundred times during the shift, there must be a reasonable target of incidents per on-call shift in order to ensure adequate time for follow-up.
+
+Handover incidents at the end of the shift is important to allow the next SREs on the shift to keep the same quality and the same attention required by the event. At the start of each shift, the on-call engineer must read the handoff from the previous shift. 
+
+Maintaining Playbooks and the knowledge base can be tough, details in playbooks go out of date at the same rate as production environment, products and technologies evolute. Writing playbooks and keeping them update must be a share responsibility among all the SREs on call, it must be part of the principal activities on a daily basis. 
+
+SREs on call must be able to engage SMEs, or must tenured engineers if they need help, sometimes troubleshooting new issues that are not catalogued must required the engagement of different areas, engineers on call must know how to use the communication channels in order to be in contact with the right team when required.
 
