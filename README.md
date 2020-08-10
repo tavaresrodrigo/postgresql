@@ -32,17 +32,23 @@ Implementing the postgresql namespace, we allow the administrator to divide clus
 
 On Monday August 10, 2020 there were [3 closed issues]( https://github.com/pgbackrest/pgbackrest/issues?q=is%3Aissue+Kubernetes+is%3Aclosed+) on the pgbackrest project page related to Kubernetes, [105 closed issues](https://github.com/kubernetes/kubernetes/issues?q=is%3Aissue+Postgres+is%3Aclosed) and [17 open issues](https://github.com/kubernetes/kubernetes/issues?q=is%3Aissue+Postgres+is%3Aopen) related to Postgres on the Kubernetes project page, there are multiple root causes that are related to a number of factors as we can see below:
 
-* Issues related to Persistent Volumes.
-* Problems to pull container images.
 * DNS resolution.
 * Problems to configure Secrets and ConfigMaps.
-* Autoscaling not able provision resources.
+* Autoscaling.
 * Performance issues during the backup and restore operations.
 * Timeout issues.
 
 ## How to mitigate and prevent these issues ? 
 
-Readiness and Liveness probes, init containers, HPA, CA, 
+Most of the DNS resolution issues are related to CoreDNS not having the enough capacity to process the DNS queries into the cluster, by enabling the [CoreDNS Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/administer-cluster/dns-horizontal-autoscaling/) we allow the cluster to adjust the required capacity in order to process the cluster DNS queries according to the demand. 
+
+[Readiness and Liveness probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) are useful to mitigate timeout issues when the services forward requests to Pods that are not ready yet or Pods that eventually transition to broken state.
+
+By configuring [resource requests and limits](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) we allow the scheduler to decide which node to place the Pod based on the capacity available. Limits allows kubelet to enforces the values we set so that the running container is not allowed to use more of that resource than the limit you set, avoiding the instances to be overwhelmed running out of resources.
+
+With the [Horizontal Pod Autoscaler (HPA)](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) the cluster will automatically scale the pods in a deployment, statefulset or replicaset based on a HorizontalPodAutoscaler definition adjusting to ensure the application will meet the performance criteria.
+
+The [Cluster Autoscaler (CA)](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler) a component that automatically adjusts the size of the Cluster watching for Pods on the Pending state to be schedule due to the lack of resources, this event will trigger the increase of the capacity by adding new nodes.
 
 ## Architecture
 
@@ -62,6 +68,7 @@ Fluent Bit, Elasticsearch and Kibana are also known as “EFK stack”. Fluent B
 * Fluent Bit
 * Amazon Elasticsearch Service:
 * Kibana
+* Metric Server
 
 ## Monitoring
 
