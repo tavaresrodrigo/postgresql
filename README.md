@@ -63,7 +63,7 @@ The native functionality provided by the container engine or runtime is usually 
 Fluent Bit, Elasticsearch and Kibana are also known as “EFK stack”. Fluent Bit will forward logs from the individual instances in the cluster to a centralized logging backend where they are combined for higher-level reporting using ElasticSearch and Kibana.
 
 * Prometheus
-* Helm
+* Helm-3
 * Grafana
 * Fluent Bit
 * Amazon Elasticsearch Service:
