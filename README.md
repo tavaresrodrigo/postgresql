@@ -66,9 +66,8 @@ Fluent Bit, Elasticsearch and Kibana are also known as “EFK stack”. Fluent B
 * Helm-3
 * Grafana
 * Fluent Bit
-* Amazon Elasticsearch Service:
 * Kibana
-* Metric Server
+* metris-server
 
 ## Monitoring
 
