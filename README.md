@@ -22,7 +22,7 @@ Kubernetes Secrets allow us store sensitive information, such as the Postgres da
 
 ### [Service](../master/manifests/Service.yaml)
 
-A service type ClusterIP was created to expose the Postgres service into the scope of the VPC cluster only. Exposing the data tier service with a cluster-internal IP is considered a best practice in compliance with the AWS Well-Architected Framework which consists in the 5 pillars: operational excellence, security, reliability, performance efficiency, and cost optimization.
+A Headless Service was created to expose the Postgres statefull Pods into the scope of the VPC cluster only. Exposing the data tier service with a cluster-internal endpoint is considered a best practice in compliance with the AWS Well-Architected Framework which consists in the 5 pillars: operational excellence, security, reliability, performance efficiency, and cost optimization.
 
 ### [Namespace](../master/manifests/Namespace.yaml)
 
